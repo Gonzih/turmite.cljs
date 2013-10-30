@@ -139,8 +139,8 @@
       context (.getContext canvas "2d")
       check-pos-fn (def-poschecking-fn width height)]
   (init-colors width height)
-  (run-turmite 0
-               0
+  (run-turmite (rand-int 2)
+               (rand-int 2)
                (int (/ width 2))
                (int (/ height 2))
                check-pos-fn
