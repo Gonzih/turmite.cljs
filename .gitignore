@@ -1,0 +1,4 @@
+out/
+.nrepl-port
+.lein-repl-history
+langtons_ant.js
