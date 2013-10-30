@@ -11,7 +11,8 @@
 
 (def counter (atom 0))
 (def colors (atom []))
-(def pixel-ratio 2)
+(def pixel-ratio 4)
+(def timeout 40)
 
 (comment
   {:current-state {:current-color {:rotate "rotation (L R N U)"
@@ -22,27 +23,57 @@
   N - "none"
   U - "180 degree")
 
+  ;var gGoodActions = {
+
+      ;+"LANGTON":     "1R0,0L0,1R0,0L0",
+      ;"COUNTER1":    "0N1,0U1,1R1,0N1",
+      ;"COUNTER2":    "1R1,0N1,0N0,1L1",
+                      ;newcolor|rotate|newstate
+                      ;00   01  10  11
+      ;+"CHAOTIC1":    "1R0,1R1,0N0,0N1",
+      ;"CHAOTIC2":    "1L0,1N1,1N0,0N1",
+      ;"CHAOTIC3":    "1R1,0L1,1N0,0N0",
+      ;"CHAOTIC4":    "1L1,0R0,0N0,0R1",
+      ;"CHAOTIC5":    "0R1,0R1,1L1,0N0",
+      ;"SPIRAL1":     "1N1,1L0,1R1,0N0",
+      ;"SPIRAL2":     "1L0,0R1,1R0,0L1",
+      ;"SPIRAL3":     "1U0,0N1,0L0,0R1",
+      ;+"FIBONACCI":   "1L1,1L1,1R1,0N0",
+      ;"LADDER":      "0N1,1U1,1L0,1N1",
+      ;"DIXIE":       "0R1,0L0,1U1,0R0",
+      ;"DIAMOND":     "1L0,0R1,0R0,1R0",
+      ;"CORAL":       "1R1,1L1,1R1,0R0",
+      ;"SQUARE1":     "1L0,1R1,0R0,0L1",
+      ;"SQUARE2":     "0R1,0L0,1N0,1U1"
+  ;}
+
 (def decision-tables [
+                      ;Fibonacci
+                      {0 {0 {:rotate :L :new-color 1 :new-state 1}
+                          1 {:rotate :L :new-color 1 :new-state 1}}
+                      1  {0 {:rotate :R :new-color 1 :new-state 1}
+                          1 {:rotate :N :new-color 0 :new-state 0}}}
+                      ;Langton
                       {0 {0 {:rotate :L :new-color 1 :new-state 0}
                           1 {:rotate :R :new-color 0 :new-state 0}}
                       1  {0 {:rotate :N :new-color 0 :new-state 0}
                           1 {:rotate :N :new-color 0 :new-state 0}}}
-
+                      ;Chaotic 1
                       {0 {0 {:rotate :R :new-color 1 :new-state 0}
                           1 {:rotate :R :new-color 1 :new-state 1}}
                       1  {0 {:rotate :N :new-color 0 :new-state 0}
                           1 {:rotate :N :new-color 0 :new-state 1}}}
-
+                      ;Chaotic 2
                       {0 {0 {:rotate :R :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 0 :new-state 1}}
                        1 {0 {:rotate :N :new-color 1 :new-state 0}
                           1 {:rotate :N :new-color 0 :new-state 0}}}
-
+                      ;Chaotic 3
                       {0 {0 {:rotate :L :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 0 :new-state 1}}
                        1 {0 {:rotate :R :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 0 :new-state 0}}}
-
+                      ;Chaotic 4
                       {0 {0 {:rotate :R :new-color 1 :new-state 1}
                           1 {:rotate :R :new-color 0 :new-state 1}}
                        1 {0 {:rotate :N :new-color 1 :new-state 0}
@@ -67,12 +98,18 @@
                               (vec (repeat (inc width) 0))))))
 
 (defn set-color [x y color context]
-  (draw-color x y color context)
   (swap! colors #(set-in % [x y] color)))
 
 (defn get-color [x y]
   (log (str "pos = " [x y]))
   (get-in @colors [x y]))
+
+(defn display-turmite [[x y] context]
+  (aset context "fillStyle" "rgb(200, 0, 0)")
+  (.fillRect context (* pixel-ratio x) (* pixel-ratio y) pixel-ratio pixel-ratio))
+
+(defn display-move [[x y] context]
+  (draw-color x y (get-color x y) context))
 
 (defn rotate-turmite [rotate orientation]
   (log rotate)
@@ -107,15 +144,18 @@
     new-pos))
 
 (defn run-one-move [pos turmite check-pos-fn context]
+  (display-move pos context)
   (swap! counter inc)
   (when (zero? (rem @counter 100)) (aset js/document "title" (str "move: " @counter)))
   (let [new-turmite (update-turmite pos turmite context)
         new-pos (move-turmite new-turmite pos)]
     (if (check-pos-fn new-pos)
-      (js/setTimeout #(run-one-move new-pos
-                                    new-turmite
-                                    check-pos-fn
-                                    context) 1)
+      (do
+        (display-turmite new-pos context)
+        (js/setTimeout #(run-one-move new-pos
+                                      new-turmite
+                                      check-pos-fn
+                                      context) timeout))
       ;(recur new-pos new-turmite check-pos-fn context)
       (log :done (str "old: " pos " new: " new-pos)))))
 
