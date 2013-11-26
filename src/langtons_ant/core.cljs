@@ -173,15 +173,16 @@
          (>= x 0)
          (>= y 0))))
 
-(let [canvas (.getElementById js/document "turmite")
-      width (-> (aget canvas "width") (/ pixel-ratio) int)
-      height (-> (aget canvas "height") (/ pixel-ratio) int)
-      context (.getContext canvas "2d")
-      check-pos-fn (def-poschecking-fn width height)]
-  (init-colors width height)
-  (run-turmite (rand-int 2)
-               (rand-int 2)
-               (int (/ width 2))
-               (int (/ height 2))
-               check-pos-fn
-               context))
+(defn ^:export run [id]
+  (let [canvas (.getElementById js/document id)
+        width (-> (aget canvas "width") (/ pixel-ratio) int)
+        height (-> (aget canvas "height") (/ pixel-ratio) int)
+        context (.getContext canvas "2d")
+        check-pos-fn (def-poschecking-fn width height)]
+    (init-colors width height)
+    (run-turmite (rand-int 2)
+                 (rand-int 2)
+                 (int (/ width 2))
+                 (int (/ height 2))
+                 check-pos-fn
+                 context)))
