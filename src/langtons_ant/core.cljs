@@ -25,62 +25,119 @@
 
   ;var gGoodActions = {
 
-      ;+"LANGTON":     "1R0,0L0,1R0,0L0",
-      ;"COUNTER1":    "0N1,0U1,1R1,0N1",
-      ;"COUNTER2":    "1R1,0N1,0N0,1L1",
                       ;newcolor|rotate|newstate
                       ;00   01  10  11
-      ;+"CHAOTIC1":    "1R0,1R1,0N0,0N1",
-      ;"CHAOTIC2":    "1L0,1N1,1N0,0N1",
-      ;"CHAOTIC3":    "1R1,0L1,1N0,0N0",
-      ;"CHAOTIC4":    "1L1,0R0,0N0,0R1",
-      ;"CHAOTIC5":    "0R1,0R1,1L1,0N0",
-      ;"SPIRAL1":     "1N1,1L0,1R1,0N0",
-      ;"SPIRAL2":     "1L0,0R1,1R0,0L1",
-      ;"SPIRAL3":     "1U0,0N1,0L0,0R1",
-      ;+"FIBONACCI":   "1L1,1L1,1R1,0N0",
-      ;"LADDER":      "0N1,1U1,1L0,1N1",
-      ;"DIXIE":       "0R1,0L0,1U1,0R0",
-      ;"DIAMOND":     "1L0,0R1,0R0,1R0",
-      ;"CORAL":       "1R1,1L1,1R1,0R0",
-      ;"SQUARE1":     "1L0,1R1,0R0,0L1",
-      ;"SQUARE2":     "0R1,0L0,1N0,1U1"
+
   ;}
 
 (def decision-tables [
-                      ;Fibonacci
+                      ;+"FIBONACCI":   "1L1,1L1,1R1,0N0",
                       {0 {0 {:rotate :L :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 1 :new-state 1}}
-                      1  {0 {:rotate :R :new-color 1 :new-state 1}
-                          1 {:rotate :N :new-color 0 :new-state 0}}}
-                      ;Langton
-                      {0 {0 {:rotate :L :new-color 1 :new-state 0}
-                          1 {:rotate :R :new-color 0 :new-state 0}}
-                      1  {0 {:rotate :N :new-color 0 :new-state 0}
-                          1 {:rotate :N :new-color 0 :new-state 0}}}
+                       1 {0 {:rotate :R :new-color 1 :new-state 1}
+                          1 {:rotate :N :new-color 0 :new-state 0}}
+                       :name "Fibonacci"}
+                      ;+"LANGTON":     "1R0,0L0,1R0,0L0",
+                      {0 {0 {:rotate :R :new-color 1 :new-state 0}
+                          1 {:rotate :L :new-color 0 :new-state 0}}
+                       1 {0 {:rotate :R :new-color 1 :new-state 0}
+                          1 {:rotate :L :new-color 0 :new-state 0}}
+                       :name "Langton"}
                       ;Chaotic 1
+                      ;"CHAOTIC2":    "1L0,1N1,1N0,0N1",
+                      ;"CHAOTIC3":    "1R1,0L1,1N0,0N0",
+                      ;"CHAOTIC4":    "1L1,0R0,0N0,0R1",
+                      ;"CHAOTIC5":    "0R1,0R1,1L1,0N0",
                       {0 {0 {:rotate :R :new-color 1 :new-state 0}
                           1 {:rotate :R :new-color 1 :new-state 1}}
-                      1  {0 {:rotate :N :new-color 0 :new-state 0}
-                          1 {:rotate :N :new-color 0 :new-state 1}}}
+                       1 {0 {:rotate :N :new-color 0 :new-state 0}
+                          1 {:rotate :N :new-color 0 :new-state 1}}
+                       :name "Chaotic 1"}
                       ;Chaotic 2
                       {0 {0 {:rotate :R :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 0 :new-state 1}}
                        1 {0 {:rotate :N :new-color 1 :new-state 0}
-                          1 {:rotate :N :new-color 0 :new-state 0}}}
+                          1 {:rotate :N :new-color 0 :new-state 0}}
+                       :name "Chaotic 2"}
                       ;Chaotic 3
                       {0 {0 {:rotate :L :new-color 1 :new-state 1}
                           1 {:rotate :L :new-color 0 :new-state 1}}
                        1 {0 {:rotate :R :new-color 1 :new-state 1}
-                          1 {:rotate :L :new-color 0 :new-state 0}}}
+                          1 {:rotate :L :new-color 0 :new-state 0}}
+                       :name "Chaotic 3"}
                       ;Chaotic 4
                       {0 {0 {:rotate :R :new-color 1 :new-state 1}
                           1 {:rotate :R :new-color 0 :new-state 1}}
                        1 {0 {:rotate :N :new-color 1 :new-state 0}
-                          1 {:rotate :N :new-color 1 :new-state 1}}}
+                          1 {:rotate :N :new-color 1 :new-state 1}}
+                       :name "Chaotic 4"}
+                      ;"CORAL":       "1R1,1L1,1R1,0R0",
+                      {0 {0 {:new-color 1 :rotate :R :new-state 1}
+                          1 {:new-color 1 :rotate :L :new-state 1}}
+                       1 {0 {:new-color 1 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :L :new-state 0}}
+                       :name "Coral"}
+                      ;"SQUARE1":     "1L0,1R1,0R0,0L1",
+                      {0 {0 {:new-color 1 :rotate :L :new-state 0}
+                          1 {:new-color 1 :rotate :R :new-state 1}}
+                       1 {0 {:new-color 0 :rotate :R :new-state 0}
+                          1 {:new-color 0 :rotate :L :new-state 1}}
+                       :name "Square 1"}
+                      ;"SQUARE2":     "0R1,0L0,1N0,1U1"
+                      {0 {0 {:new-color 0 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :L :new-state 0}}
+                       1 {0 {:new-color 1 :rotate :N :new-state 0}
+                          1 {:new-color 1 :rotate :U :new-state 1}}
+                       :name "Square 2"}
+                      ;"COUNTER1":    "0N1,0U1,1R1,0N1",
+                      {0 {0 {:new-color 0 :rotate :N :new-state 1}
+                          1 {:new-color 0 :rotate :U :new-state 1}}
+                       1 {0 {:new-color 1 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :N :new-state 1}}
+                       :name "Counter 1"}
+                      ;"COUNTER2":    "1R1,0N1,0N0,1L1",
+                      {0 {0 {:new-color 1 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :N :new-state 1}}
+                       1 {0 {:new-color 0 :rotate :N :new-state 0}
+                          1 {:new-color 1 :rotate :L :new-state 1}}
+                       :name "Counter 2"}
+                      ;"SPIRAL1":     "1N1,1L0,1R1,0N0",
+                      {0 {0 {:new-color 1 :rotate :N :new-state 1}
+                          1 {:new-color 1 :rotate :L :new-state 0}}
+                       1 {0 {:new-color 1 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :N :new-state 0}}
+                       :name "Spiral 1"}
+                      ;"SPIRAL2":     "1L0,0R1,1R0,0L1",
+                      {0 {0 {:new-color 1 :rotate :L :new-state 0}
+                          1 {:new-color 0 :rotate :R :new-state 1}}
+                       1 {0 {:new-color 1 :rotate :R :new-state 0}
+                          1 {:new-color 0 :rotate :L :new-state 1}}
+                       :name "Spiral 2"}
+                      ;"SPIRAL3":     "1U0,0N1,0L0,0R1",
+                      {0 {0 {:new-color 1 :rotate :U :new-state 0}
+                          1 {:new-color 0 :rotate :N :new-state 1}}
+                       1 {0 {:new-color 0 :rotate :L :new-state 0}
+                          1 {:new-color 0 :rotate :R :new-state 1}}
+                       :name "Spiral 3"}
+                      ;"LADDER":      "0N1,1U1,1L0,1N1",
+                      {0 {0 {:new-color 0 :rotate :N :new-state 1}
+                          1 {:new-color 1 :rotate :U :new-state 1}}
+                       1 {0 {:new-color 1 :rotate :L :new-state 0}
+                          1 {:new-color 1 :rotate :N :new-state 1}}
+                       :name "Ladder"}
+                      ;"DIXIE":       "0R1,0L0,1U1,0R0",
+                      {0 {0 {:new-color 0 :rotate :R :new-state 1}
+                          1 {:new-color 0 :rotate :L :new-state 0}}
+                       1 {0 {:new-color 1 :rotate :U :new-state 1}
+                          1 {:new-color 0 :rotate :R :new-state 0}}
+                       :name "Dixe"}
+                      ;"DIAMOND":     "1L0,0R1,0R0,1R0",
+                      {0 {0 {:new-color 1 :rotate :L :new-state 0}
+                          1 {:new-color 0 :rotate :R :new-state 1}}
+                       1 {0 {:new-color 0 :rotate :R :new-state 0}
+                          1 {:new-color 1 :rotate :R :new-state 0}}
+                       :name "Diamond"}
                       ])
-
-(def decisions-table (rand-nth decision-tables))
 
 (defn draw-color [x y color context]
   (let [style (if (= 1 color)
@@ -101,7 +158,6 @@
   (swap! colors #(set-in % [x y] color)))
 
 (defn get-color [x y]
-  (log (str "pos = " [x y]))
   (get-in @colors [x y]))
 
 (defn display-turmite [[x y] context]
@@ -112,7 +168,6 @@
   (draw-color x y (get-color x y) context))
 
 (defn rotate-turmite [rotate orientation]
-  (log rotate)
   (let [rotation (condp = rotate
                    :L -90
                    :R 90
@@ -124,13 +179,11 @@
       (< v 0) (+ v 360)
       :else v)))
 
-(defn update-turmite [[x y] {:keys [state orientation]} context]
+(defn update-turmite [[x y] {:keys [state orientation]} context decisions-table]
   (let [color (get-color x y)
         {:keys [new-color
                 new-state
                 rotate]} (get-in decisions-table [state color])]
-    (log (str "state color = " [state color]))
-    (log (get-in decisions-table [state color]))
     (set-color x y new-color context)
     {:state new-state :orientation (rotate-turmite rotate orientation)}))
 
@@ -143,11 +196,11 @@
         new-pos (map + pos delta)]
     new-pos))
 
-(defn run-one-move [pos turmite check-pos-fn context]
+(defn run-one-move [pos turmite check-pos-fn context decisions-table]
   (display-move pos context)
   (swap! counter inc)
-  (when (zero? (rem @counter 100)) (aset js/document "title" (str "move: " @counter)))
-  (let [new-turmite (update-turmite pos turmite context)
+  ;(when (or (= 1 @counter) (zero? (rem @counter 100))) (log (str "move: " @counter)))
+  (let [new-turmite (update-turmite pos turmite context decisions-table)
         new-pos (move-turmite new-turmite pos)]
     (if (check-pos-fn new-pos)
       (do
@@ -155,16 +208,18 @@
         (js/setTimeout #(run-one-move new-pos
                                       new-turmite
                                       check-pos-fn
-                                      context) timeout))
+                                      context
+                                      decisions-table) timeout))
       ;(recur new-pos new-turmite check-pos-fn context)
       (log :done (str "old: " pos " new: " new-pos)))))
 
-(defn run-turmite [init-color init-state init-x init-y check-pos-fn context]
+(defn run-turmite [init-color init-state init-x init-y check-pos-fn context decisions-table]
   (set-color init-x init-y init-color context)
   (run-one-move [init-x init-y]
                 {:state init-state :orientation 0}
                 check-pos-fn
-                context))
+                context
+                decisions-table))
 
 (defn def-poschecking-fn [width height]
   (fn [[x y]]
@@ -178,11 +233,14 @@
         width (-> (aget canvas "width") (/ pixel-ratio) int)
         height (-> (aget canvas "height") (/ pixel-ratio) int)
         context (.getContext canvas "2d")
-        check-pos-fn (def-poschecking-fn width height)]
+        check-pos-fn (def-poschecking-fn width height)
+        decisions-table (rand-nth decision-tables)]
+    (log (:name decisions-table))
     (init-colors width height)
     (run-turmite (rand-int 2)
                  (rand-int 2)
                  (int (/ width 2))
                  (int (/ height 2))
                  check-pos-fn
-                 context)))
+                 context
+                 decisions-table)))
