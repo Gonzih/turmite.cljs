@@ -197,21 +197,23 @@
     new-pos))
 
 (defn run-one-move [pos turmite check-pos-fn context decisions-table]
-  (display-move pos context)
-  (swap! counter inc)
-  ;(when (or (= 1 @counter) (zero? (rem @counter 100))) (log (str "move: " @counter)))
-  (let [new-turmite (update-turmite pos turmite context decisions-table)
-        new-pos (move-turmite new-turmite pos)]
-    (if (check-pos-fn new-pos)
-      (do
-        (display-turmite new-pos context)
-        (js/setTimeout #(run-one-move new-pos
-                                      new-turmite
-                                      check-pos-fn
-                                      context
-                                      decisions-table) timeout))
-      ;(recur new-pos new-turmite check-pos-fn context)
-      (log :done (str "old: " pos " new: " new-pos)))))
+  (try
+    (display-move pos context)
+    (swap! counter inc)
+    ;(when (or (= 1 @counter) (zero? (rem @counter 100))) (log (str "move: " @counter)))
+    (let [new-turmite (update-turmite pos turmite context decisions-table)
+          new-pos (move-turmite new-turmite pos)]
+      (if (check-pos-fn new-pos)
+        (do
+          (display-turmite new-pos context)
+          (js/setTimeout #(run-one-move new-pos
+                                        new-turmite
+                                        check-pos-fn
+                                        context
+                                        decisions-table) timeout))
+        ;(recur new-pos new-turmite check-pos-fn context)
+        (log (str :done " old: " pos " new: " new-pos))))
+    (catch js/RangeError e (log "Catched " e))))
 
 (defn run-turmite [init-color init-state init-x init-y check-pos-fn context decisions-table]
   (set-color init-x init-y init-color context)
@@ -235,7 +237,6 @@
         context (.getContext canvas "2d")
         check-pos-fn (def-poschecking-fn width height)
         decisions-table (rand-nth decision-tables)]
-    (log (:name decisions-table))
     (init-colors width height)
     (run-turmite (rand-int 2)
                  (rand-int 2)
@@ -243,4 +244,5 @@
                  (int (/ height 2))
                  check-pos-fn
                  context
-                 decisions-table)))
+                 decisions-table)
+    (:name decisions-table)))
