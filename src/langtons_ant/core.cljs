@@ -1,6 +1,4 @@
-(ns langtons-ant.core
-  (:require [cljs.core.async])
-  (:require-macros [cljs.core.async.macros :as am :refer [go]]))
+(ns langtons-ant.core)
 
 (def debug false)
 
