@@ -177,7 +177,7 @@
       :else v)))
 
 (defn update-turmite [[x y] {:keys [state orientation]} context decisions-table]
-  (let [color (get-color x y)
+  (let [color (or (get-color x y) 0)
         {:keys [new-color
                 new-state
                 rotate]} (get-in decisions-table [state color])]
