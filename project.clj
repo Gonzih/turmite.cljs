@@ -12,8 +12,7 @@
   :cljsbuild {
     :builds [{:id "langtons-ant"
               :source-paths ["src"]
-              :compiler {
-                :output-to "langtons_ant.js"
-                :output-dir "out"
-                :optimizations :none
-                :source-map true}}]})
+              :compiler {:output-to "langtons_ant.js"
+                         :output-dir "out"
+                         :optimizations :advanced
+                         :source-map true}}]})
