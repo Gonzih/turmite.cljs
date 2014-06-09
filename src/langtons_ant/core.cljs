@@ -4,8 +4,7 @@
 
 (defn log [& args]
   (when debug
-    (doseq [arg args]
-      (.log js/console (str arg)))))
+    (.log js/console (apply str args))))
 
 (def counter (atom 0))
 (def colors (atom []))
