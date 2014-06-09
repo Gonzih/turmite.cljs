@@ -2,8 +2,8 @@
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/clojurescript "0.0-2138"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojurescript "0.0-2227"]]
 
   :plugins [[lein-cljsbuild "0.3.4"]]
 
