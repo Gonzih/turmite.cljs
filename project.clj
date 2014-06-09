@@ -15,4 +15,4 @@
               :compiler {:output-to "langtons_ant.js"
                          :output-dir "out"
                          :optimizations :advanced
-                         :source-map true}}]})
+                         :source-map "langtons_ant.map"}}]})
