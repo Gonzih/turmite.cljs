@@ -2,13 +2,10 @@
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2227"]]
-
-  :plugins [[lein-cljsbuild "0.3.4"]]
-
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [org.clojure/clojurescript "1.7.228"]]
+  :plugins [[lein-cljsbuild "1.1.2"]]
   :source-paths ["src"]
-
   :cljsbuild {
     :builds [{:id "langtons-ant"
               :source-paths ["src"]
